@@ -11,13 +11,16 @@ RUN apt-get update && apt-get install -yq --no-install-recommends unzip
 
 RUN echo "spark.executor.memory   50g" >>$SPARK_HOME/conf/spark-defaults.conf
 
+RUN echo root:nopassword | chpasswd
 RUN echo $NB_USER:nopassword | chpasswd
+
+RUN usermod -aG sudo $NB_USER
 
 # switch user
 USER $NB_USER
 
 RUN pip install --upgrade pip
-pip install awscli
+RUN pip install awscli
 
 WORKDIR /home/$NB_USER/work
 
